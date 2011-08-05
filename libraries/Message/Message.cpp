@@ -17,23 +17,41 @@
  * 
  * $Rev$:   
  * $Author$: 
- * $Date$:  
+ * $Date: $:  
 
 */
 
-#include "config.h"
-#include "Logger.h"
-#include "Poller.h"
-#include "Debug.h"
 
-void setup(){
-	Logger::begin();
-	Poller::begin();
+#include "WProgram.h"
+#include "Message.h"
+
+/*
+ * Initializes the object by setting the default values of the attributes.
+ * time is set to the current uptime, nameSpace and units are set to "Unset" 
+ * and the value is set to 0.
+ */
+Message::Message(){
+    time=millis();
+    nameSpace="Unset";
+    units="Unset";
+    value="0";
 }
 
-void loop(){
-	Poller::poll();
-	delay(10);
+/**
+ * Returns a comma delimited string containing the message data.
+ */
+String Message::toCSV(){
+    String CSV;
+    CSV=String(time);
+    CSV.concat(",");
+    CSV.concat(nameSpace);
+    CSV.concat(",");
+    CSV.concat(value);
+    CSV.concat(",");
+    CSV.concat(units);
+    CSV.concat(",");
+    return CSV;
 }
+
 
 

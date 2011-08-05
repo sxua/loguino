@@ -21,19 +21,37 @@
 
 */
 
-#include "config.h"
-#include "Logger.h"
-#include "Poller.h"
+#ifndef SDOutput_h
+#define SDOutput_h
+#include <config.h>
+#ifdef ENABLE_SD_OUTPUT
+#include "WProgram.h"
 #include "Debug.h"
+#include "SD.h"
+#include "Message.h"
+#include "Logger.h"
+	#ifndef SD_ACTIVE_PIN
+		#error Define SD_ACTIVE_PIN to the pin that will go high when the SD module is writing to a file.
+	#endif
 
-void setup(){
-	Logger::begin();
-	Poller::begin();
-}
+/**
+ * A logger implementation that writes data to SD cards using the SD library.
+ */
+class SDOutput
+{
+	/**
+	 * If the logger was able to open a file on an SD Card, it becomes active.
+	 */
+    static bool active;
+	//! The open file object where the file is being written to.
+    static File _File;
+    public:
+        static bool begin();
+        static bool log(Message &msg);
+        static bool flush();
+};
 
-void loop(){
-	Poller::poll();
-	delay(10);
-}
 
+#endif
+#endif
 

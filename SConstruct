@@ -1,9 +1,4 @@
 #!/usr/bin/python
-TARGET = 'loguino'
-FILES=[
-		TARGET+'.pde',
-		'libraries/loguino/loguino.h',
-	]
 
 # scons script for the Arduino sketch
 # http://code.google.com/p/arscons/
@@ -129,6 +124,7 @@ MCU = getBoardConf(r'^%s\.build\.mcu=(.*)'%ARDUINO_BOARD)
 F_CPU = getBoardConf(r'^%s\.build\.f_cpu=(.*)'%ARDUINO_BOARD)
 
 # There should be a file with the same name as the folder and with the extension .pde
+TARGET = 'loguino'
 assert(os.path.exists(TARGET+'.pde'))
 
 cFlags = ['-ffunction-sections', '-fdata-sections', '-fno-exceptions',
@@ -167,12 +163,56 @@ core_sources = map(lambda x: x.replace(ARDUINO_CORE, 'build/core/'), core_source
 # add libraries
 libCandidates = []
 ptnLib = re.compile(r'^[ ]*#[ ]*include [<"](.*)\.h[>"]')
+for line in open (TARGET+'.pde'):
+    result = ptnLib.findall(line)
+    if result:
+        libCandidates += result
 
-for fl in FILES:
-	for line in open (fl):
-		result = ptnLib.findall(line)
-		if result:
-			libCandidates += result
+for line in open ('libraries/Poller/Poller.h'):
+    result = ptnLib.findall(line)
+    if result:
+        libCandidates += result
+
+for line in open ('libraries/Logger/Logger.h'):
+    result = ptnLib.findall(line)
+    if result:
+        libCandidates += result
+
+for line in open ('libraries/MSPoller/MSPoller.h'):
+    result = ptnLib.findall(line)
+    if result:
+        libCandidates += result
+
+for line in open ('libraries/LIS331Poller/LIS331Poller.h'):
+    result = ptnLib.findall(line)
+    if result:
+        libCandidates += result
+
+for line in open ('libraries/ITG3200Poller/ITG3200Poller.h'):
+    result = ptnLib.findall(line)
+    if result:
+        libCandidates += result
+for line in open ('libraries/LIS331/LIS331.h'):
+    result = ptnLib.findall(line)
+    if result:
+        libCandidates += result
+for line in open ('libraries/MSPoller/MSPoller.h'):
+    result = ptnLib.findall(line)
+    if result:
+        libCandidates += result
+for line in open ('libraries/SDOutput/SDOutput.h'):
+    result = ptnLib.findall(line)
+    if result:
+        libCandidates += result
+
+
+for line in open ('libraries/GPSPoller/GPSPoller.h'):
+	result = ptnLib.findall(line)
+	if result:
+		libCandidates += result
+
+
+
 
 
 # Hack. In version 20 of the Arduino IDE, the Ethernet library depends
@@ -189,7 +229,7 @@ for orig_lib_dir in ARDUINO_LIBS:
     for libPath in filter(os.path.isdir, glob(pathJoin(orig_lib_dir, '*'))):
         libName = os.path.basename(libPath)
         if not libName in libCandidates:
-			pass
+            continue
         envArduino.Append(CPPPATH = libPath.replace(orig_lib_dir, lib_dir))
         lib_sources = gatherSources(libPath)
         utilDir = pathJoin(libPath, 'utility')

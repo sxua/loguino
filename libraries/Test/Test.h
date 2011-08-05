@@ -21,19 +21,15 @@
 
 */
 
-#include "config.h"
-#include "Logger.h"
-#include "Poller.h"
-#include "Debug.h"
+#ifndef TEST_H
+#define TEST_H
 
-void setup(){
-	Logger::begin();
-	Poller::begin();
-}
+#include "WProgram.h"
 
-void loop(){
-	Poller::poll();
-	delay(10);
-}
+void test(bool result, String message);
 
+
+
+
+#endif
 

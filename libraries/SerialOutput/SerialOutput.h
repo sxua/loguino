@@ -21,19 +21,33 @@
 
 */
 
-#include "config.h"
+
+
+#ifndef SerialOutput_h
+#define SerialOutput_h
+
+#include <config.h>
+#include "WProgram.h"
 #include "Logger.h"
-#include "Poller.h"
-#include "Debug.h"
 
-void setup(){
-	Logger::begin();
-	Poller::begin();
-}
+#ifdef ENABLE_SERIAL_OUTPUT
+	#ifndef SO_SERIAL_PORT
+		#error SO_SERIAL_PORT must be defined as a valid arduino Serial device
+	#endif
+	#ifndef SO_SERIAL_PORT_SPEED
+		#error SO_SERIAL_PORT_SPEED must be defined as the speed to log to the serial port
+	#endif
 
-void loop(){
-	Poller::poll();
-	delay(10);
-}
 
+class SerialOutput
+{
+	static bool active;
+    public:
+        static bool begin();
+        static bool log(Message &msg);
+        static bool flush();
+};
+#endif
+
+#endif
 

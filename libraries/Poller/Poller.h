@@ -21,19 +21,39 @@
 
 */
 
-#include "config.h"
-#include "Logger.h"
-#include "Poller.h"
-#include "Debug.h"
 
-void setup(){
-	Logger::begin();
-	Poller::begin();
-}
+#ifndef Poller_h
+#define Poller_h
 
-void loop(){
-	Poller::poll();
-	delay(10);
-}
+#include <config.h>
+#include <WProgram.h>
+#include <MSPoller.h>
+#include <LIS331Poller.h>
+#include <DummyPoller.h>
+#include <GPSPoller.h>
+#include <DigitalPoller.h>
+#include <AnalogPoller.h>
+#include <ITG3200Poller.h>
 
+/**
+ * The poller is responsible for querying each device and sending out 
+ * messages to the messaging system. 
+ *
+ * In order to make adding and removing support for different hardware 
+ * setups easier each query type has its own sub poller, this 
+ * implementation simply has to call the methods on each of the sub 
+ * pollers based on the configuration options set.
+ *
+ */
+class Poller
+{
+	public:
+		static void begin();
+		static void poll();
+};
+
+
+
+
+#endif
 

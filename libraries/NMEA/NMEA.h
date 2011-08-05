@@ -15,25 +15,38 @@
  * You should have received a copy of the GNU General Public License
  * along with Loguino.  If not, see <http://www.gnu.org/licenses/>.
  * 
- * $Rev$:   
- * $Author$: 
- * $Date$:  
+ * $Rev$
+ * $Author$
+ * $Date$
 
 */
 
-#include "config.h"
-#include "Logger.h"
-#include "Poller.h"
+
+#ifndef NMEA_H
+#define NMEA_H
+#include "WProgram.h"
 #include "Debug.h"
 
-void setup(){
-	Logger::begin();
-	Poller::begin();
-}
-
-void loop(){
-	Poller::poll();
-	delay(10);
-}
 
 
+class NMEA{
+	String getField(int field);
+	char sumMsg(String &message);
+	String readSentence;
+	String activeSentence;
+	int state;
+	public:
+		bool addChar(char c);
+		bool validFix();
+		String getTime();
+		char fixType();
+		String getLatitude();
+		String getLongitude();
+		String getSpeed();
+		String getCourse();
+		String getDate();
+};
+
+
+
+#endif

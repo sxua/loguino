@@ -20,20 +20,15 @@
  * $Date$:  
 
 */
+#include "Test.h"
 
-#include "config.h"
-#include "Logger.h"
-#include "Poller.h"
-#include "Debug.h"
-
-void setup(){
-	Logger::begin();
-	Poller::begin();
-}
-
-void loop(){
-	Poller::poll();
-	delay(10);
+void test(bool result, String message){
+	if (result){
+		Serial.print("Pass: ");
+	}else{
+		Serial.print("FAIL: ");
+	}
+	Serial.println(message);
 }
 
 

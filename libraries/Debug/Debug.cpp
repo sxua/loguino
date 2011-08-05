@@ -15,25 +15,43 @@
  * You should have received a copy of the GNU General Public License
  * along with Loguino.  If not, see <http://www.gnu.org/licenses/>.
  * 
- * $Rev$:   
- * $Author$: 
- * $Date$:  
+ * $Rev$   
+ * $Author$
+ * $Date$
 
 */
 
-#include "config.h"
-#include "Logger.h"
-#include "Poller.h"
+#include <config.h>
+#include "WProgram.h"
 #include "Debug.h"
 
-void setup(){
-	Logger::begin();
-	Poller::begin();
-}
-
-void loop(){
-	Poller::poll();
-	delay(10);
+void debug(int level, String message){
+	if (level<=DEBUG_LEVEL){
+		message="# " + message;
+		switch (level){
+			case FATAL:
+				message = "# FATAL: " + message;
+				break;
+			case ERROR:
+				message = "# ERROR: " + message;
+				break;
+			case WARN:
+				message = "#  WARN: " + message;
+				break;
+			case INFO:
+				message = "#  INFO: " + message;
+				break;
+			case DEBUG: 
+				message = "# DEBUG: " + message;
+				break;
+			case TRACE:
+				message = "# TRACE: " + message;
+				break;
+			default : 
+				message = "# BROKE: " + message;
+		}
+		Serial.println(message);
+	}
 }
 
 

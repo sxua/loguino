@@ -15,25 +15,28 @@
  * You should have received a copy of the GNU General Public License
  * along with Loguino.  If not, see <http://www.gnu.org/licenses/>.
  * 
- * $Rev$:   
- * $Author$: 
- * $Date$:  
+ * $Rev$   
+ * $Author$ 
+ * $Date$  
 
 */
 
-#include "config.h"
-#include "Logger.h"
-#include "Poller.h"
-#include "Debug.h"
+#include <config.h>
+#include "WProgram.h"
 
-void setup(){
-	Logger::begin();
-	Poller::begin();
-}
+#ifndef Debug_h
+#define Debug_h
 
-void loop(){
-	Poller::poll();
-	delay(10);
-}
+#define OFF 0
+#define FATAL 1
+#define ERROR 2
+#define WARN 3
+#define INFO 4
+#define DEBUG 5
+#define TRACE 6
+
+void debug(int level, String message);
+
+#endif
 
 

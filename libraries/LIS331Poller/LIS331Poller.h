@@ -15,25 +15,44 @@
  * You should have received a copy of the GNU General Public License
  * along with Loguino.  If not, see <http://www.gnu.org/licenses/>.
  * 
- * $Rev$:   
- * $Author$: 
- * $Date$:  
+ * $Rev$
+ * $Author$
+ * $Date$  
 
 */
 
-#include "config.h"
+#ifndef LIS331Poller_h
+#define LIS331Poller_h
+
+#ifdef ENABLE_LIS331_POLLER
+
+#include <config.h>
+#include "WProgram.h"
+#include "Wire.h"
+#include "LIS331.h"
 #include "Logger.h"
-#include "Poller.h"
-#include "Debug.h"
+#include "Message.h"
 
-void setup(){
-	Logger::begin();
-	Poller::begin();
-}
-
-void loop(){
-	Poller::poll();
-	delay(10);
-}
+#ifndef LIS_BUS_ADDRESS
+	#error LIS_BUS_ADDRESS must be set to the address of the LIS331 device
+#endif
 
 
+/**
+ * The LIS331 Poller queries for a LIS331 accelerometer and logs the G-Force
+ * on each axis.
+ */
+class LIS331Poller
+{
+	static LIS331 lis;
+	static bool active;
+	static byte timeouts;
+    public:
+        static bool begin();
+		static bool poll();
+};
+
+#endif
+
+
+#endif

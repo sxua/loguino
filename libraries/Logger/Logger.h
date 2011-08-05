@@ -21,19 +21,32 @@
 
 */
 
+
+#ifndef Logger_h
+#define Logger_h
+
+
 #include "config.h"
-#include "Logger.h"
-#include "Poller.h"
+#include "WProgram.h"
+#include "Message.h"
+#include "SerialOutput.h"
+#include "SDOutput.h"
 #include "Debug.h"
 
-void setup(){
-	Logger::begin();
-	Poller::begin();
-}
+#ifndef LOGGER_FLUSH_MAX
+	#error "LOGGER_FLUSH_MAX must be defined as an integer value."
+#endif
 
-void loop(){
-	Poller::poll();
-	delay(10);
-}
+class Logger
+{
+	static byte flushCount;
+	public:
+		static void begin();
+		static void log(Message &msg);
+};
 
+
+
+
+#endif
 
